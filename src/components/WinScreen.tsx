@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import confetti from 'canvas-confetti';
 import type { GameState } from '../types';
 import { BingoCard } from './BingoCard';
 import { Button } from './ui/Button';
@@ -11,6 +13,11 @@ interface Props {
 }
 
 export function WinScreen({ game, onPlayAgain, onHome, onShare }: Props) {
+  useEffect(() => {
+    // Burst from both sides — discreet, no sound
+    confetti({ particleCount: 80, spread: 60, origin: { x: 0.3, y: 0.6 } });
+    confetti({ particleCount: 80, spread: 60, origin: { x: 0.7, y: 0.6 } });
+  }, []);
   const { card, winningLine, winningWord, startedAt, completedAt, filledCount, category } = game;
   if (!card) return null;
 

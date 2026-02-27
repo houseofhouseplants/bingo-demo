@@ -1,8 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { CategoryId, Toast, WinningLine } from './types';
 import { useGame } from './context/GameContext';
 import { generateCard } from './lib/cardGenerator';
 import { checkForBingo, countFilled } from './lib/bingoChecker';
+import { shareResult } from './lib/shareUtils';
+import { usePersistGame, loadGame } from './hooks/useLocalStorage';
 import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 import { useBingoDetection } from './hooks/useBingoDetection';
 import { LandingPage } from './components/LandingPage';
@@ -21,6 +23,18 @@ export default function App() {
   const [showMicPrompt, setShowMicPrompt] = useState(false);
   const [micDenied, setMicDenied] = useState(false);
   const [detectedWords, setDetectedWords] = useState<string[]>([]);
+
+  // Restore in-progress game on load
+  useEffect(() => {
+    const saved = loadGame();
+    if (saved) {
+      setGame(saved);
+      setScreen('game');
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Persist game state on every change
+  usePersistGame(game);
 
   const addToast = useCallback((message: string) => {
     const id = crypto.randomUUID();
@@ -57,7 +71,6 @@ export default function App() {
     startGame(categoryId, card);
     setDetectedWords([]);
     setScreen('game');
-    // Show mic prompt if supported and not yet denied
     if (isSupported && !micDenied && !isListening) {
       setShowMicPrompt(true);
     }
@@ -91,15 +104,8 @@ export default function App() {
     }
   };
 
-  const handleMicAllow = () => {
-    setShowMicPrompt(false);
-    startListening();
-  };
-
-  const handleMicDeny = () => {
-    setShowMicPrompt(false);
-    setMicDenied(true);
-  };
+  const handleMicAllow = () => { setShowMicPrompt(false); startListening(); };
+  const handleMicDeny = () => { setShowMicPrompt(false); setMicDenied(true); };
 
   const handleNewCard = () => {
     if (game.category) {
@@ -109,16 +115,10 @@ export default function App() {
     }
   };
 
-  const handleShare = () => {
-    const { winningWord, filledCount, completedAt, startedAt, category } = game;
-    const elapsed = startedAt && completedAt ? Math.round((completedAt - startedAt) / 60000) : 0;
-    const text = `🎯 I got BINGO in ${elapsed} minutes!\nCategory: ${category}\nWinning word: "${winningWord}"\n${filledCount}/25 squares filled\n\nPlay Meeting Bingo: ${window.location.href}`;
-    if (navigator.share) {
-      navigator.share({ text }).catch(() => {});
-    } else {
-      navigator.clipboard?.writeText(text).catch(() => {});
-      addToast('Result copied to clipboard!');
-    }
+  const handleShare = async () => {
+    const result = await shareResult(game);
+    if (result === 'copied') addToast('Result copied to clipboard!');
+    if (result === 'error') addToast('Could not share — try screenshotting instead.');
   };
 
   const dismissToast = (id: string) => setToasts(prev => prev.filter(t => t.id !== id));
