@@ -27,7 +27,7 @@ export function WinScreen({ game, onPlayAgain, onHome, onShare }: Props) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center p-4">
-      <div className="max-w-sm w-full text-center">
+      <div className="max-w-md w-full text-center">
         <div className="text-5xl mb-2">🎉</div>
         <h1 className="text-4xl font-bold text-green-700 mb-1">BINGO!</h1>
         <p className="text-gray-500 text-sm mb-4">Winning word: <strong className="text-gray-800">"{winningWord}"</strong></p>

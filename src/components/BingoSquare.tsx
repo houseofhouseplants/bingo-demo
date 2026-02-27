@@ -18,9 +18,9 @@ export function BingoSquare({ square, isWinning, onClick }: Props) {
     <button
       onClick={onClick}
       disabled={isFreeSpace}
-      className={`aspect-square p-1.5 border-2 rounded-lg transition-all duration-200 flex items-center justify-center text-center ${bg}`}
+      className={`aspect-square p-1 border-2 rounded-lg transition-all duration-200 flex items-center justify-center text-center ${bg}`}
     >
-      <span className={`text-xs sm:text-xs font-medium leading-tight break-words ${isFilled && !isFreeSpace ? 'line-through opacity-90' : ''}`}>
+      <span className={`text-[10px] sm:text-xs font-medium leading-tight break-words hyphens-auto ${isFilled && !isFreeSpace ? 'line-through opacity-90' : ''}`}>
         {isFreeSpace ? '⭐ FREE' : word}
       </span>
     </button>

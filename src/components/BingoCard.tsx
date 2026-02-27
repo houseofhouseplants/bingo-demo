@@ -9,7 +9,7 @@ interface Props {
 
 export function BingoCard({ card, winningSquareIds, onSquareClick }: Props) {
   return (
-    <div className="grid grid-cols-5 gap-1 w-full max-w-sm mx-auto">
+    <div className="grid grid-cols-5 gap-1 w-full">
       {card.squares.flat().map(square => (
         <BingoSquare
           key={square.id}
