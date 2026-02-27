@@ -7,7 +7,7 @@ interface Props {
 }
 
 export function BingoSquare({ square, isWinning, onClick }: Props) {
-  const { word, isFilled, isAutoFilled, isFreeSpace } = square;
+  const { word, isFilled, isFreeSpace } = square;
 
   let bg = 'bg-white border-gray-200 text-gray-700 hover:border-blue-300 hover:scale-105';
   if (isWinning) bg = 'bg-green-500 border-green-600 text-white ring-2 ring-green-300 scale-105';
