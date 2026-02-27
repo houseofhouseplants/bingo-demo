@@ -140,6 +140,7 @@ export default function App() {
           onSquareClick={handleSquareClick}
           onToggleListening={handleToggleListening}
           onNewCard={handleNewCard}
+          onChangeCategory={() => { stopListening(); setScreen('category'); }}
         />
       )}
       {screen === 'win' && (

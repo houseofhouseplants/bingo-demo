@@ -5,11 +5,15 @@ interface Props {
   isSupported: boolean;
   onToggleListening: () => void;
   onNewCard: () => void;
+  onChangeCategory: () => void;
 }
 
-export function GameControls({ isListening, isSupported, onToggleListening, onNewCard }: Props) {
+export function GameControls({ isListening, isSupported, onToggleListening, onNewCard, onChangeCategory }: Props) {
   return (
     <div className="flex gap-3 justify-center mt-4">
+      <Button variant="secondary" size="sm" onClick={onChangeCategory}>
+        ← Categories
+      </Button>
       <Button variant="secondary" size="sm" onClick={onNewCard}>
         🔄 New Card
       </Button>

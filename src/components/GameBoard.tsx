@@ -15,11 +15,12 @@ interface Props {
   onSquareClick: (row: number, col: number) => void;
   onToggleListening: () => void;
   onNewCard: () => void;
+  onChangeCategory: () => void;
 }
 
 export function GameBoard({
   game, transcript, interimTranscript, detectedWords,
-  isListening, isSupported, onSquareClick, onToggleListening, onNewCard,
+  isListening, isSupported, onSquareClick, onToggleListening, onNewCard, onChangeCategory,
 }: Props) {
   const { card, winningLine, filledCount, category } = game;
   if (!card) return null;
@@ -68,6 +69,7 @@ export function GameBoard({
           isSupported={isSupported}
           onToggleListening={onToggleListening}
           onNewCard={onNewCard}
+          onChangeCategory={onChangeCategory}
         />
       </div>
     </div>
